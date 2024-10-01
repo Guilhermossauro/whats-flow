@@ -1,0 +1,32 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+./package-lock.json
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+lerna-debug.log*
+
+# Ignore .env file
+.env
+src/_IGNORE_Whatsapp-auth/
+# Ignore local environments settings
+.DS_Store
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Ignore build output
+dist/
+build/
+
+# Ignore specific bot-related files (if needed)
+db.json
+
+# Ignore OS files
+Thumbs.db
