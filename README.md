@@ -110,8 +110,17 @@ Você pode configurar os fluxos de conversas editando o arquivo `steps.json` loc
     "nextStep": 2
 }
 ```
-- `options`: Lista de opções que o usuário pode selecionar. Cada opção tem um número associado e um texto (`optext`) que descreve a escolha.
-
+- `options`: Lista de opções que o usuário pode selecionar. Cada opção tem um número associado e um texto (`optext`) que descreve a escolha. Sera necessario que essa opcao exista no servidor como o seguinte exemplo
+```json
+  {
+    "step": "Cadastro",
+    "text": "Seu cadastro foi iniciado.",
+    "hasOptions": false,
+    "isFunction": true,
+    "functionName": "iniciarCadastro"
+    ,"nextStep": 1
+  }
+```
 ## Funções Personalizadas
 
 Se um *step* tiver a opção `isFunction` como `true`, uma função personalizada será chamada para lidar com a etapa. Essas funções devem ser criadas dentro da pasta `src/steps/functions/`.
