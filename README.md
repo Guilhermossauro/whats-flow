@@ -18,172 +18,130 @@
 </p>
 
 
-# Flows WhatsApp
 
-## Sobre
-O Flows WhatsApp é uma ferramenta para automatizar interações no WhatsApp usando um servidor JSON local para gerenciamento de usuários. O bot fornece recursos como fluxos de mensagens, filas de usuários e muito mais.
+# Whats-Flow
+
+## Descrição Geral
+
+Whats-Flow é uma ferramenta de automação de mensagens do WhatsApp, projetada para criar fluxos de conversação dinâmicos com base em etapas configuráveis. Ele permite o envio e o recebimento de mensagens através de um bot, personalizando interações de acordo com a necessidade do usuário.
+
+## Funcionalidades Principais
+- Criação e edição de etapas de fluxo de conversas diretamente através de arquivos JSON ou uma API.
+- Suporte a múltiplas opções de resposta para os usuários, permitindo criar caminhos dinâmicos no fluxo de mensagens.
+- Execução de funções personalizadas associadas a etapas específicas.
+- Fácil integração com a API do WhatsApp para automação de respostas.
+
+## Arquitetura e Fluxo de Funcionamento
+
+O Whats-Flow funciona em torno de um sistema de etapas (*steps*), onde cada mensagem enviada ao usuário corresponde a uma etapa no fluxo de conversação. As etapas podem ser configuradas com ou sem opções, e também podem acionar funções específicas que processam a lógica adicional.
+
+### Fluxo Básico:
+1. O usuário interage com o bot.
+2. O sistema identifica o *step* atual do usuário e envia a mensagem correspondente.
+3. Caso o *step* tenha opções, o usuário faz a seleção e o sistema processa a resposta.
+4. Dependendo da escolha do usuário, o próximo *step* é carregado, ou uma função personalizada é executada.
+
+## Pré-requisitos
+
+Antes de rodar o projeto, certifique-se de ter os seguintes requisitos instalados:
+- **Node.js** (versão 14 ou superior)
+- **npm** (Gerenciador de pacotes do Node.js)
 
 ## Instalação
 
-### Passo 1: Clonar o Repositório
-```bash
-git clone https://github.com/Guilhermossauro/whats-flow
-cd whats-flow
-```
+1. Clone o repositório:
+    ```bash
+    git clone https://github.com/Guilhermossauro/whats-flow.git
+    ```
 
-### Passo 2: Instalar Dependências
-Execute os seguintes comandos para instalar os pacotes necessários:
-```bash
-npm install
-cd server
-npm install
-cd ..
-```
+2. Navegue até o diretório do projeto:
+    ```bash
+    cd whats-flow
+    ```
 
-### Passo 3: Configurar o Servidor Local
+3. Instale as dependências:
+    ```bash
+    npm install
+    ```
+
+4. Configurar o Servidor Local
 Este bot usa um servidor JSON local para armazenar usuários e os steps para serem configurados. Para iniciar o servidor em modo de desenvolvimento, execute:
 ```bash
 npm run userServer
 npm run stepServer
 ```
 
-### Passo 4: Iniciar o Bot
-Inicie o bot executando:
-```bash
-npm start
-```
+5. Inicie o servidor:
+    ```bash
+    npm start
+    ```
 
-Você será solicitado a inserir um número de telefone (inclua o código do país e o DDD sem zeros à esquerda). Exemplo:
-```bash
-5527981254789
-```
-Em seguida, insira o código do WhatsApp exibido no terminal.
+## Configurando Etapas de Conversa (Steps)
 
-## Execução em Produção com PM2
-Para rodar o bot em segundo plano, instale o PM2:
-```bash
-npm install -g pm2
-pm2 start app.js --name Whats-flow
-cd server
-pm2 start stepServer.js --name stepsServer
-pm2 start userServer.js --name userServer
-cd ..
-```
+Você pode configurar os fluxos de conversas editando o arquivo `steps.json` localizado na pasta `server`, ou criando novas etapas através de requisições POST utilizando ferramentas como o Postman.
 
-
-# Guia de Configuração de Etapas para o Bot
-
-Este guia oferece uma visão clara de como criar e editar fluxos de etapas (steps) para seu bot. Você pode configurar novas etapas diretamente através do arquivo `steps.json`, localizado na pasta `server`, ou utilizar ferramentas como o Postman para enviar requisições POST para o servidor local em que o `stepsServer` está rodando.
-
-## Estrutura de Configuração de Etapas
-
-Cada etapa segue um formato específico, conforme o exemplo abaixo:
+### Exemplo de Configuração de Step Básico
 
 ```json
 {
-  "step": 0,
-  "text": "Olá, qual é o seu nome?",
-  "hasOptions": false,
-  "nextStep": 1
+    "step": 0,
+    "text": "Olá, qual é o seu nome?",
+    "hasOptions": false,
+    "nextStep": 1
 }
 ```
+- `step`: Identifica o número da etapa no fluxo de conversação.
+- `text`: A mensagem que será enviada ao usuário.
+- `hasOptions`: Define se esta etapa possui múltiplas opções para o usuário selecionar.
+- `nextStep`: Especifica qual será o próximo *step* após este ser processado.
 
-- `step`: Indica em qual etapa essa mensagem será exibida.
-- `text`: Mensagem a ser apresentada ao usuário.
-- `hasOptions`: Define se esta etapa possui múltiplas opções de resposta.
-- `nextStep`: Indica o próximo passo a ser executado após esta etapa.
-
-### Etapas com Múltiplas Opções
-
-Se desejar configurar uma etapa com múltiplas opções para o usuário escolher, utilize o seguinte formato:
+### Exemplo de Step com Múltiplas Opções
 
 ```json
 {
-  "step": 1,
-  "text": "Olá! Como posso ajudar hoje?",
-  "hasOptions": true,
-  "options": [
-    { "number": 1, "optext": "Suporte" },
-    { "number": 2, "optext": "Cadastro" },
-    { "number": 3, "optext": "Novidades" }
-  ],
-  "nextStep": 2
+    "step": 1,
+    "text": "Como posso ajudar hoje?",
+    "hasOptions": true,
+    "options": [
+        { "number": 1, "optext": "Suporte" },
+        { "number": 2, "optext": "Cadastro" },
+        { "number": 3, "optext": "Novidades" }
+    ],
+    "nextStep": 2
 }
 ```
+- `options`: Lista de opções que o usuário pode selecionar. Cada opção tem um número associado e um texto (`optext`) que descreve a escolha.
 
-- `options`: Lista de opções disponíveis para o usuário, com o número correspondente e o texto descritivo.
-- `optext`: Texto associado à opção e que direciona ao próximo passo do fluxo.
+## Funções Personalizadas
 
-### Funções Associadas a Etapas
+Se um *step* tiver a opção `isFunction` como `true`, uma função personalizada será chamada para lidar com a etapa. Essas funções devem ser criadas dentro da pasta `src/steps/functions/`.
 
-Caso uma etapa deva executar uma função, utilize o seguinte formato:
-
-```json
-{
-  "step": "Cadastro",
-  "text": "Seu cadastro foi iniciado.",
-  "hasOptions": false,
-  "isFunction": true,
-  "functionName": "iniciarCadastro",
-  "nextStep": 1
-}
-```
-
-- `isFunction`: Define se essa etapa executará uma função.
-- `functionName`: Nome da função a ser executada, localizada na pasta `src/steps/functions`.
-
-### Exemplo de Função
-
-Aqui está um exemplo de uma função que pode ser configurada na etapa:
+### Exemplo de Função Personalizada
 
 ```javascript
 const { atualizarStepUsuario } = require("../../../fetch");
 
 module.exports = async (client, message, usuario) => {
-  const remoteJid = message.key.remoteJid;
-  await client.sendMessage(remoteJid, { text: "Iniciando o processo de cadastro..." });
-  await atualizarStepUsuario(usuario, 1);
+    const remoteJid = message.key.remoteJid;
+    await client.sendMessage(remoteJid, { text: "Iniciando o processo de cadastro..." });
+    await atualizarStepUsuario(usuario, 1);
 };
 ```
+- `client.sendMessage`: Envia uma mensagem ao usuário.
+- `atualizarStepUsuario`: Atualiza o *step* do usuário no banco de dados ou servidor.
 
-Para criar sua própria função, adicione o arquivo na pasta `src/steps/functions` e siga o exemplo acima.
+## Contribuições
+
+Contribuições são bem-vindas! Siga estas etapas para contribuir com o projeto:
+1. Faça um *fork* do repositório.
+2. Crie um *branch* para sua funcionalidade: `git checkout -b feature-minha-funcionalidade`.
+3. Faça o commit das suas mudanças: `git commit -m 'Minha nova funcionalidade'`.
+4. Envie suas alterações para o repositório remoto: `git push origin feature-minha-funcionalidade`.
+5. Abra um *pull request*.
+
+## Licença
+
+Este projeto está licenciado sob os termos da licença MIT. Consulte o arquivo `LICENSE` para mais informações.
 
 
-
-
-## Guia de Instalação no Linux
-
-### 1. Instalar Node.js e npm:
-```bash
-sudo apt update
-sudo apt install nodejs npm
-```
-
-### 2. Instalar as Dependências do Bot:
-```bash
-cd whats-flow
-sudo npm install
-cd server
-npm install
-cd ..
-```
-
-### 3. Iniciar o Bot:
-
-```bash
-node app.js
-```
-
-## Execução em Produção com PM2
-instale o PM2:
-```bash
-npm install -g pm2
-pm2 start app.js --name Whats-flow
-cd server
-pm2 start stepServer.js --name stepsServer
-pm2 start userServer.js --name userServer
-cd ..
-```
-
-## Autor
-Criado por [Guilhermossauro](https://github.com/Guilhermossauro)
+Sinta-se à vontade para ajustar ou estender o sistema de *steps* conforme necessário para o seu projeto. O Whats-Flow é altamente configurável, permitindo criar fluxos de interação personalizados que atendem a diversas necessidades.
