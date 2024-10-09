@@ -21,7 +21,7 @@
 # Flows WhatsApp
 
 ## Sobre
-O Flows WhatsApp Bot é uma ferramenta para automatizar interações no WhatsApp usando um servidor JSON local para gerenciamento de usuários. O bot fornece recursos como fluxos de mensagens, filas de usuários e muito mais.
+O Flows WhatsApp é uma ferramenta para automatizar interações no WhatsApp usando um servidor JSON local para gerenciamento de usuários. O bot fornece recursos como fluxos de mensagens, filas de usuários e muito mais.
 
 ## Instalação
 
