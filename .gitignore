@@ -4,6 +4,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 ./package-lock.json
+
 # Logs
 logs/
 *.log
@@ -13,7 +14,8 @@ lerna-debug.log*
 
 # Ignore .env file
 .env
-src/_IGNORE_Whatsapp-auth/
+_IGNORE_WhatsApp-Auth/
+
 # Ignore local environments settings
 .DS_Store
 .idea/
