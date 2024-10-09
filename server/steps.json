@@ -1,0 +1,48 @@
+{"steps":[
+  {
+      "step": 0,
+      "text": "Olá, qual é o seu nome?",
+      "hasoptions": false,
+      "nextStep": 1
+    },
+  {
+    "step": 1,
+    "text": "Olá! Como posso ajudar hoje?",
+    "hasOptions": true,
+    "options": [
+      { "number": 1, "optext": "Suporte" },
+      { "number": 2, "optext": "Cadastro" },
+      { "number": 3, "optext": "Novidades" }
+    ],      "nextStep": 2
+  },
+  {
+    "step": 2,
+    "text": "Certo, me diga qual é o problema.",
+    "hasOptions": false,
+    "nextStep": 3
+    
+  },
+  {
+    "step": "Suporte",
+    "text": "Entrarei em contato com nossa equipe de suporte",
+    "hasOptions": false,
+    "isFunction": true,
+    "functionName": "suporte"
+    ,"nextStep": 1
+  },
+  {
+    "step": "Cadastro",
+    "text": "Seu cadastro foi iniciado.",
+    "hasOptions": false,
+    "isFunction": true,
+    "functionName": "iniciarCadastro"
+    ,"nextStep": 1
+  }
+  ,  {
+    "step": "Novidades",
+    "text": "Estamos sem nenhuma novidade no momento",
+    "hasOptions": false,
+    "isFunction": false,
+    "nextStep": 1
+  }
+]}

@@ -82,7 +82,6 @@ async function startBot() {
             console.log('[IGNORING GROUP MESSAGE]')
             return
         }
-        
         msgHandler(client,message)
     });
 }

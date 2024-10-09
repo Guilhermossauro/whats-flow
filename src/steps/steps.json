@@ -1,0 +1,37 @@
+{"steps":[
+    {
+        "step": 0,
+        "text": "Olá, qual é o seu nome?",
+        "hasoptions": false,
+        "nextStep": 1
+      },
+    {
+      "step": 1,
+      "text": "Eai tudo bem com voce ?",
+      "hasOptions": false,
+      "options": [
+        { "number": 1, "optext": "Suporte" },
+        { "number": 2, "optext": "Cadastro" },
+        { "number": 3, "optext": "Novidades" }
+      ],      "nextStep": 2
+    },
+    {
+      "step": 2,
+      "text": "Por favor selecione uma opcao.",
+      "hasOptions": true,
+      "options": [
+        { "number": 1, "optext": "Suporte" },
+        { "number": 2, "optext": "Cadastro" },
+        { "number": 3, "optext": "Novidades" }
+      ],      "nextStep": 3
+      
+    },
+    {
+      "step": 3,
+      "text": "Seu cadastro foi iniciado.",
+      "hasOptions": false,
+      "isFunction": true,
+      "functionName": "iniciarCadastro"
+      ,"nextStep": 4
+    }
+  ]}
