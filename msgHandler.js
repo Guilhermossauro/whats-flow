@@ -1,6 +1,6 @@
 const axios = require("axios");
 const steps = require("./steps");
-const TIMEOUT_DURATION = 5 * 60 * 1000;
+const TIMEOUT_DURATION = 5* 1000;
 const userTimeouts = {};
 async function mimetest(message) {
   const types = [
@@ -56,44 +56,57 @@ async function buscarOuCadastrarUsuario(numero) {
   }
   return usuario;
 }
-function setTimeoutForUser(remoteJid) {
-  userTimeouts[remoteJid] = true;
-  setTimeout(() => delete userTimeouts[remoteJid], TIMEOUT_DURATION);
-}
-module.exports = msgHandler = async (client, enviado) => {
-  try{
-  const { key, message } = enviado;
-  const mimetyped = await mimetest(message);
-
-  if (mimetyped.mimetype === 'ephemeralMessage') {
-    return;
+function resetUserTimeout(client, remoteJid) {
+  if (userTimeouts[remoteJid]) {
+    clearTimeout(userTimeouts[remoteJid]);
   }
-  if (mimetyped.mimetype === 'extendedTextMessage' || mimetyped.mimetype === 'conversation') {
-    const remoteJid = key.remoteJid;
-    const msg = mimetyped.command?.toLowerCase() || '';
-    if (userTimeouts[remoteJid]) return;
-
-    const usuario = await buscarOuCadastrarUsuario(remoteJid);
-    if (usuario.error) return console.log(usuario.error);
-
+  
+  userTimeouts[remoteJid] = setTimeout(async () => {
     try {
+      await client.sendMessage(remoteJid, {
+        text: "Atendimento finalizado por inatividade. Se desejar, envie uma mensagem para iniciar um novo atendimento."
+      });
+    } catch (error) {
+      console.log("Erro ao enviar mensagem de finalização:", error);
+    }
+  }, TIMEOUT_DURATION);
+}
+
+module.exports = msgHandler = async (client, enviado) => {
+  try {
+    const { key, message } = enviado;
+    const mimetyped = await mimetest(message);
+
+    if (mimetyped.mimetype === 'ephemeralMessage') {
+      return;
+    }
+
+    if (mimetyped.mimetype === 'extendedTextMessage' || mimetyped.mimetype === 'conversation') {
+      const remoteJid = key.remoteJid;
+      const msg = mimetyped.command?.toLowerCase() || '';
+
+      const usuario = await buscarOuCadastrarUsuario(remoteJid);
+      if (usuario.error) return console.log(usuario.error);
+
+      resetUserTimeout(client, remoteJid);  
+
       if (msg === 'sair') {
-        console.log('disse sair');
+        console.log('Usuário disse sair');
         await client.sendMessage(remoteJid, {
-          text: "Você saiu do atendimento. Não receberá novas mensagens por 5 minutos."
+          text: "Você saiu do atendimento. Para iniciar novamente, envie uma nova mensagem."
         });
-        setTimeoutForUser(remoteJid);
-        return;  
+        clearTimeout(userTimeouts[remoteJid]); 
+        return;
       }
 
-    } catch (err) {
-      console.log(err);
-    }
-   enviado.mimetyped = mimetyped
-    await steps.processStep(client, enviado, usuario);
-  } else {
+      enviado.mimetyped = mimetyped;
+      await steps.processStep(client, enviado, usuario);
 
-  }}catch(err){
-    console.log('MsgHandler Error:',err)
+    } else {
+      console.log("Mensagem com tipo não suportado:", mimetyped.mimetype);
+    }
+
+  } catch (err) {
+    console.log('MsgHandler Error:', err);
   }
-};
+}
