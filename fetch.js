@@ -2,11 +2,12 @@ const axios = require('axios');
 const path = require('path');
 const fs = require('fs');
 const STEPS_URL = 'http://localhost:3421/steps'; 
+const USER_URL= 'http://localhost:3014/usuarios'
 
 // functions //
 exports.atualizarStepUsuario = async function atualizarStepUsuario(cliente, novoStep) {
   try {
-    const response = await axios.patch(`${STEPS_URL}/${cliente.numero}`,{step: novoStep});
+    const response = await axios.patch(`${USER_URL}/${cliente.numero}`,{step: novoStep});
     return response.data;
   } catch (error) {
     console.log("Erro ao atualizar step do usuário:", error);
