@@ -16,7 +16,7 @@ exports.atualizarStepUsuario = async function atualizarStepUsuario(cliente, novo
 }
 exports.atualizarStatus = async function atualizarStatus(cliente, status=true) {
   try {
-    const response = await axios.patch(`${STEPS_URL}/${cliente.numero}`,{atendido: status});
+      const response = await axios.patch(`${USER_URL}/${cliente.numero}`,{atendido: status});
     return response.data;
   } catch (error) {
     console.log("Erro ao atualizar step do usuário:", error);
